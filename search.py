@@ -1,36 +1,18 @@
 import cv2
 import numpy as np
+import check
+from PIL import Image
 
-def createImage( filepath ):
+correct = check.createArray( "images/search1.png" )
+image = check.createArray( "images/search2.png" )
+# draw = check.createArray( "images/blank.png" )
 
-	return np.swapaxes( cv2.cvtColor( np.array( cv2.imread( filepath ) ), cv2.COLOR_BGR2RGB ), 0, 1 )
+for xx in range( 80 ):
+	for yy in range( 80 ):
+		if check.checkPixel( correct[ 0, 0 ], image[ xx, yy ], 60 ):
+			img_buffer = cv2.
 
-def validatePixel( px1, px2, sensitivity ):
+# draw[ xx, yy ] = ( 0, 0, 0 )
 
-	if not any( px1 ): return True
-
-	for i in range( 3 ):
-		if abs( int( px1[ i ] ) - int( px2[ i ] ) ) > sensitivity: return False
-
-	return True
-
-def loadImage( filepath ):
-
-	global template
-
-	template = createImage( filepath )
-
-def checkImage( filepath, thresh1 = 50, thresh2 = 40 ):
-
-	comp = createImage( filepath )
-	error = 0
-
-	for xx in range( 50 ):
-		for yy in range( 50 ):
-			if not validatePixel( template[ xx, yy ], comp[ xx, yy ], thresh2 ): error += 1
-
-	print( f"{ error } errors detected." )
-	return ( error <= thresh1 )
-
-loadImage( 'images/steam1.png' )
-print( "These are similar images." if checkImage( 'images/steam5.png' ) else "These are not similar images." )
+# img = Image.fromarray( np.swapaxes( draw, 0, 1 ), 'RGB' )
+# img.show()
