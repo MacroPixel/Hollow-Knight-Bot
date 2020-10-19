@@ -7,10 +7,14 @@ correct = check.createArray( "images/search1.png" )
 image = check.createArray( "images/search2.png" )
 # draw = check.createArray( "images/blank.png" )
 
-for xx in range( 80 ):
-	for yy in range( 80 ):
+check.createRef( "images/search1.png" )
+
+for xx in range( image.shape[0] - correct.shape[0] ):
+	for yy in range( image.shape[1] - correct.shape[1] ):
 		if check.checkPixel( correct[ 0, 0 ], image[ xx, yy ], 60 ):
-			img_buffer = cv2.
+
+			buffer = check.copyArray( image, ( xx, yy ), ( correct.shape[0], correct.shape[1] ) )
+			if check.checkImage( buffer, 0, zz50 ): print( f"{ xx }, { yy }" )
 
 # draw[ xx, yy ] = ( 0, 0, 0 )
 
