@@ -14,23 +14,16 @@ def checkPixel( px1, px2, thresh2 ):
 
 	return True
 
-def createRef( filepath ):
+def checkImage( template, comp, thresh1 = .05, thresh2 = 40, print_errors = False ):
 
-	global template
-
-	template = createArray( filepath )
-
-def checkImage( comp, thresh1 = 50, thresh2 = 40 ):
-
-	# comp = createArray( filepath )
 	error = 0
 
 	for xx in range( comp.shape[0] ):
 		for yy in range( comp.shape[1] ):
 			if not checkPixel( template[ xx, yy ], comp[ xx, yy ], thresh2 ): error += 1
 
-	# print( f"{ error } errors detected." )
-	return ( error <= thresh1 )
+	if print_errors: print( f"{ error } errors detected." )
+	return ( ( error / ( template.shape[0] * template.shape[1] ) ) <= thresh1 )
 
 def copyArray( array, start, size ):
 
