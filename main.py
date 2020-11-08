@@ -56,10 +56,10 @@ while True:
     img_small_array = np.swapaxes( np.uint8( img_small ), 0, 1 )
 
     # generate corner outputs (determine where image is found)
-    images = ( 'fk_template_1', 'fk_template_2' )
+    images = [ 'fk_attack', 'fk_idle', 'fk_jump', 'fk_jump_ant', 'fk_run', 'fk_run_ant' ]
     cornerOutput = {}
     for image_name in images:
-        cornerOutput[ image_name ] = ( loc.fromTemplate( img_cv2, cv2.imread( f'images/{ image_name }.png', 0 ), .9 ) )
+        cornerOutput[ image_name ] = ( loc.fromTemplate( img_cv2, cv2.imread( f'images/{ image_name }_temp.png', 0 ), .9 ) )
 
     # setup surface
     surf = pygame.display.get_surface()
@@ -67,21 +67,22 @@ while True:
 
     # determine corner coords of closest match
     # lowest matchvalue = closest match; cornerOutput[ name ][ 0 ] is matchvalue, ..[ 1 ] is ( cornerX, cornerY )
-    min_value = 0.3
-    min_key = "error"
+    min_value = 0.4
+    real_min_value = 999
+    min_key = "None Found"
     for image_name in cornerOutput:
         if cornerOutput[ image_name ][ 0 ] < min_value:
             min_value = cornerOutput[ image_name ][ 0 ]
             min_key = image_name
+        if cornerOutput[ image_name ][ 0 ] < real_min_value: real_min_value = cornerOutput[ image_name ][ 0 ]
     corner1, corner2 = cornerOutput[ image_name ][ 1 ]
-    print( min_key )
+    print( f"{ min_key } [{ real_min_value }]" )
 
     # if a match is found, draw rectangle there
-    if min_key != "error": pygame.draw.rect( surf, ( 0, 255, 0 ), pygame.Rect( corner1, ( corner2[0] - corner1[0], corner2[1] - corner1[1] ) ), 2 )
+    if min_key != "None Found": pygame.draw.rect( surf, ( 0, 255, 0 ), pygame.Rect( corner1, ( corner2[0] - corner1[0], corner2[1] - corner1[1] ) ), 2 )
 
     # handle other pygame stuff
     pygame.display.update()
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
